@@ -1,0 +1,13 @@
+{
+  "name": "2p-blackjack",
+  "version": "1.0.0",
+  "description": "2 player blackjack",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client-dev": "cd client && npm i && npm run start",
+    "server-dev": "cd server && npm i && npm run dev",
+    "dev": "npm run client-dev & npm run server-dev"
+  },
+  "author": "",
+  "license": "ISC"
+}
