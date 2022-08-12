@@ -7,16 +7,30 @@ interface BlackjackGamestateConstructor {
 }
 
 class BlackjackGamestate {
+    handleJoinGame(msg: JoinGameMessage) {
+        this.validateGameId(msg.gameId);
+        this.validateTokenBelongsToThisGamestate(msg);
+    }
+
+    private validateTokenBelongsToThisGamestate(msg: JoinGameMessage) {
+        if (msg.token === this.p1Token) return;
+        if (msg.token === this.p2Token) return;
+        throw Error(`token in msg ${msg.token} was not assigned in this game`);
+    }
+
     private id: string;
 
     private p1Token: string;
-
+    private isP1TokenAssigned: boolean;
     private p2Token: string;
+    private isP2TokenAssigned: boolean;
 
     private constructor(obj: BlackjackGamestateConstructor) {
         this.id = obj.id;
         this.p1Token = obj.p1Token;
+        this.isP1TokenAssigned = false;
         this.p2Token = obj.p2Token;
+        this.isP2TokenAssigned = false;
     }
 
     public static create(): BlackjackGamestate {
@@ -46,6 +60,30 @@ class BlackjackGamestate {
 
     public getId() {
         return this.id;
+    }
+
+    public getP1Token() {
+        return this.p1Token;
+    }
+
+    public getP2Token() {
+        return this.p2Token;
+    }
+
+    private validateGameId = (gid: string) => {
+        if (gid !== this.id) throw Error(`GID error this:${this.id} token:${gid}`);
+    };
+
+    public setAssignedToken(msg: ReceivedTokenMessage) {
+        this.validateGameId(msg.gameId);
+        if (msg.token === this.p1Token) {
+            if (this.isP1TokenAssigned) throw Error(`p1 token is already asssigned`);
+            this.isP1TokenAssigned = true;
+        }
+        if (msg.token === this.p2Token) {
+            if (this.isP2TokenAssigned) throw Error(`p2 token is already asssigned`);
+            this.isP2TokenAssigned = true;
+        }
     }
 }
 
