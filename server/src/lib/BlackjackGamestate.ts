@@ -12,6 +12,7 @@ class BlackjackGamestate {
     public handleJoinGame(token: string, socketId: string) {
         this.validateTokenBelongsToThisGamestate(token);
         const pcd = this.getPlayerConnectionDataByToken(token);
+        pcd.assignToken(token);
         pcd.handleSocketConnect(socketId);
     }
 
@@ -92,19 +93,6 @@ class BlackjackGamestate {
 
     public getP2Token() {
         return this.p2ConnectionData.getToken();
-    }
-
-    private validateAtleastSingleTokenAssigned = () => {
-        const p1TokenAssigned = this.p1ConnectionData.getIsTokenAssigned();
-        const p2TokenAssigned = this.p2ConnectionData.getIsTokenAssigned();
-        if (p1TokenAssigned || p2TokenAssigned) return;
-        throw Error("Unable to assign any token");
-    };
-
-    public setAssignedToken(msg: ReceivedTokenMessage) {
-        this.p1ConnectionData.assignToken(msg);
-        this.p2ConnectionData.assignToken(msg);
-        this.validateAtleastSingleTokenAssigned();
     }
 }
 
