@@ -9,6 +9,25 @@ interface BlackjackGamestateConstructor {
 }
 
 class BlackjackGamestate {
+    private id: string;
+    private p1ConnectionData: PlayerConnectionData;
+    private p2ConnectionData: PlayerConnectionData;
+    private p1GameData: PlayerGameData;
+    private p2GameData: PlayerGameData;
+
+    private constructor(obj: BlackjackGamestateConstructor) {
+        this.id = obj.id;
+        this.p1ConnectionData = new PlayerConnectionData(obj.p1Token);
+        this.p2ConnectionData = new PlayerConnectionData(obj.p2Token);
+    }
+
+    public static create(): BlackjackGamestate {
+        const id = uuidv4();
+        const p1Token = uuidv4();
+        const p2Token = uuidv4();
+        return new BlackjackGamestate({ id, p1Token, p2Token });
+    }
+
     public handleJoinGame(token: string, socketId: string) {
         this.validateTokenBelongsToThisGamestate(token);
         const pcd = this.getPlayerConnectionDataByToken(token);
@@ -44,26 +63,6 @@ class BlackjackGamestate {
         if (socketId === this.p2ConnectionData.getSocketId()) return this.p2ConnectionData;
         throw new Error(`Unable to get player connection data for socket${socketId}`);
     };
-
-    private id: string;
-
-    private p1ConnectionData: PlayerConnectionData;
-    private p2ConnectionData: PlayerConnectionData;
-    private p1GameData: PlayerGameData;
-    private p2GameData: PlayerGameData;
-
-    private constructor(obj: BlackjackGamestateConstructor) {
-        this.id = obj.id;
-        this.p1ConnectionData = new PlayerConnectionData(obj.p1Token);
-        this.p2ConnectionData = new PlayerConnectionData(obj.p2Token);
-    }
-
-    public static create(): BlackjackGamestate {
-        const id = uuidv4();
-        const p1Token = uuidv4();
-        const p2Token = uuidv4();
-        return new BlackjackGamestate({ id, p1Token, p2Token });
-    }
 
     // Creates a copy of the gamestate with the details
     // of the opponent removed.
