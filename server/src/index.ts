@@ -78,13 +78,4 @@ io.on("connection", (socket) => {
             handleGameError(e, socket);
         }
     });
-
-    socket.on("received-token", (msg: ReceivedTokenMessage) => {
-        try {
-            const g = getGamestateByGameId(msg.gameId);
-            g.setAssignedToken(msg);
-        } catch (e: any) {
-            handleGameError(e, socket);
-        }
-    });
 });
