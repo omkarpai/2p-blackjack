@@ -1,7 +1,7 @@
 class PlayerConnectionData {
-    assignToken(msg: ReceivedTokenMessage) {
-        if (msg.token !== this.token) return;
-        if (this.isTokenAssigned) throw Error(`Token is already asssigned`);
+    assignToken(token: string) {
+        if (token !== this.token) return;
+        if (this.isTokenAssigned) throw Error(`Unable to join game.Token is already asssigned`);
         this.isTokenAssigned = true;
     }
 
