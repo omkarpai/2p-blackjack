@@ -1,5 +1,5 @@
 class PlayerGameData {
-    constructor(parameters) {}
+    constructor() {}
 }
 
 export default PlayerGameData;

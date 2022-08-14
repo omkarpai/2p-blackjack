@@ -47,6 +47,8 @@ const getGamestateBySocketId = (socketId: string): BlackjackGamestate => {
 
 // Socket server
 const io = new Server(3001);
+
+const gameState = BlackjackGamestate.create();
 io.on("connection", (socket) => {
     socket.on("new-game", () => {
         const gameState = BlackjackGamestate.create();

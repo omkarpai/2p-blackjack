@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import Deck from "./Deck";
 import PlayerConnectionData from "./PlayerConnectionData";
 import PlayerGameData from "./PlayerGameData";
 
@@ -12,13 +13,15 @@ class BlackjackGamestate {
     private id: string;
     private p1ConnectionData: PlayerConnectionData;
     private p2ConnectionData: PlayerConnectionData;
-    private p1GameData: PlayerGameData;
-    private p2GameData: PlayerGameData;
+    private deck: Deck;
+    // private p1GameData: PlayerGameData;
+    // private p2GameData: PlayerGameData;
 
     private constructor(obj: BlackjackGamestateConstructor) {
         this.id = obj.id;
         this.p1ConnectionData = new PlayerConnectionData(obj.p1Token);
         this.p2ConnectionData = new PlayerConnectionData(obj.p2Token);
+        this.deck = new Deck();
     }
 
     public static create(): BlackjackGamestate {
@@ -46,11 +49,11 @@ class BlackjackGamestate {
         throw Error(`token in msg ${token} was not assigned in this game`);
     }
 
-    private getPlayerGameDataByToken = (token: string) => {
-        if (token === this.p1ConnectionData.getToken()) return this.p1GameData;
-        if (token === this.p2ConnectionData.getToken()) return this.p2GameData;
-        throw new Error(`Unable to get player game data for ${token}`);
-    };
+    // private getPlayerGameDataByToken = (token: string) => {
+    //     if (token === this.p1ConnectionData.getToken()) return this.p1GameData;
+    //     if (token === this.p2ConnectionData.getToken()) return this.p2GameData;
+    //     throw new Error(`Unable to get player game data for ${token}`);
+    // };
 
     private getPlayerConnectionDataByToken = (token: string) => {
         if (token === this.p1ConnectionData.getToken()) return this.p1ConnectionData;
