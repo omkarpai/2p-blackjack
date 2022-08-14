@@ -9,7 +9,7 @@ class Deck {
     }
 
     private static getCardValueEntries() {
-        return Object.entries(CardValue);
+        return Object.entries(CardValue).filter((v) => isNaN(Number(v[0])));
     }
 
     private static getSuites() {
@@ -19,8 +19,6 @@ class Deck {
     private static generate(): Array<Card> {
         const cardValuesEntries = Deck.getCardValueEntries();
         const suites = Deck.getSuites();
-        console.log("SUITES", suites);
-        console.log("CARDS", cardValuesEntries);
         const cards = new Array<Card>();
         for (const suite of suites) {
             for (const [name, value] of cardValuesEntries) {
