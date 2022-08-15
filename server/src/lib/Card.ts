@@ -5,9 +5,9 @@ interface CardConstructor {
 }
 
 class Card {
-    private suite: string;
-    private name: string;
-    private value: number;
+    readonly suite: string;
+    readonly name: string;
+    readonly value: number;
 
     constructor(obj: CardConstructor) {
         this.suite = obj.suite;
