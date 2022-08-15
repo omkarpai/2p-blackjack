@@ -8,3 +8,5 @@ class GameError {
         this.message = obj.message;
     }
 }
+
+export default GameError;
