@@ -14,7 +14,7 @@ class Deck {
     }
 
     private static getSuites() {
-        return Object.keys(CardSuite).filter((v) => isNaN(Number(v)));
+        return Object.keys(CardSuite);
     }
 
     private static generate(): Array<Card> {

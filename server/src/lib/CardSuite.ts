@@ -1,8 +1,8 @@
 enum CardSuite {
-    DIAMONDS,
-    HEARTS,
-    SPADES,
-    CLUBS,
+    DIAMONDS = "DIAMONDS",
+    HEARTS = "HEARTS",
+    SPADES = "SPADES",
+    CLUBS = "CLUBS",
 }
 
 export default CardSuite;
