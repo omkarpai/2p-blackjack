@@ -5,6 +5,8 @@ import path from "path";
 import { Server, Socket } from "socket.io";
 import BlackjackGamestate from "./lib/BlackjackGamestate";
 import log from "./logger/Logger";
+import { JoinGameMessage } from "./types";
+import GameError from "./errors/GameError";
 
 const app = express();
 

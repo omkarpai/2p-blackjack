@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { PlayerActionMessage } from "../types";
 import Deck from "./Deck";
 import PlayerConnectionData from "./PlayerConnectionData";
 import PlayerGameData from "./PlayerGameData";
@@ -14,14 +15,21 @@ class BlackjackGamestate {
     private p1ConnectionData: PlayerConnectionData;
     private p2ConnectionData: PlayerConnectionData;
     private deck: Deck;
-    // private p1GameData: PlayerGameData;
-    // private p2GameData: PlayerGameData;
+    private round: number;
+    private p1GameData: PlayerGameData;
+    private p2GameData: PlayerGameData;
 
     private constructor(obj: BlackjackGamestateConstructor) {
         this.id = obj.id;
         this.p1ConnectionData = new PlayerConnectionData(obj.p1Token);
         this.p2ConnectionData = new PlayerConnectionData(obj.p2Token);
         this.deck = new Deck();
+        this.round = 1;
+        this.p1GameData = new PlayerGameData({ upCard: this.deck.getTopCard() });
+        this.p2GameData = new PlayerGameData({ upCard: this.deck.getTopCard() });
+        this.p1GameData.addToDownCards(this.deck.getTopCard());
+        this.p2GameData.addToDownCards(this.deck.getTopCard());
+        console.log(this.p1GameData);
     }
 
     public static create(): BlackjackGamestate {
@@ -43,17 +51,22 @@ class BlackjackGamestate {
         pcd.handleSocketDisconnect();
     }
 
+    public handlePlayerAction(playerActionMessage: PlayerActionMessage) {
+        const pgd = this.getPlayerGameDataByToken(playerActionMessage.token);
+        pgd.
+    }
+
     private validateTokenBelongsToThisGamestate(token: string) {
         if (token === this.p1ConnectionData.getToken()) return;
         if (token === this.p2ConnectionData.getToken()) return;
         throw Error(`token in msg ${token} was not assigned in this game`);
     }
 
-    // private getPlayerGameDataByToken = (token: string) => {
-    //     if (token === this.p1ConnectionData.getToken()) return this.p1GameData;
-    //     if (token === this.p2ConnectionData.getToken()) return this.p2GameData;
-    //     throw new Error(`Unable to get player game data for ${token}`);
-    // };
+    private getPlayerGameDataByToken = (token: string) => {
+        if (token === this.p1ConnectionData.getToken()) return this.p1GameData;
+        if (token === this.p2ConnectionData.getToken()) return this.p2GameData;
+        throw new Error(`Unable to get player game data for ${token}`);
+    };
 
     private getPlayerConnectionDataByToken = (token: string) => {
         if (token === this.p1ConnectionData.getToken()) return this.p1ConnectionData;
