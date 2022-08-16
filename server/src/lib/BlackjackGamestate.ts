@@ -1,8 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
 import { PlayerActionMessage } from "../types";
+import Card from "./Card";
 import Deck from "./Deck";
+import PlayerAction from "./PlayerAction";
 import PlayerConnectionData from "./PlayerConnectionData";
 import PlayerGameData from "./PlayerGameData";
+import TurnStatus from "./TurnStatus";
 
 interface BlackjackGamestateConstructor {
     id: string;
@@ -53,7 +56,42 @@ class BlackjackGamestate {
 
     public handlePlayerAction(playerActionMessage: PlayerActionMessage) {
         const pgd = this.getPlayerGameDataByToken(playerActionMessage.token);
-        pgd.
+        this.resolveActionForPlayer(playerActionMessage.action, pgd);
+        this.determineRoundOutcome();
+    }
+
+    private determineRoundOutcome() {
+        if (!this.allPlayersTurnOver()) return;
+        // determine round status for each PGD.
+    }
+
+    private allPlayersTurnOver() {
+        const isP1TurnOver = this.p1GameData.getTurnStatus() === TurnStatus.OVER;
+        const isP2TurnOver = this.p2GameData.getTurnStatus() === TurnStatus.OVER;
+        return isP1TurnOver && isP2TurnOver;
+    }
+
+    //__________________________ACTION RESOLVERS_______________________________
+    private resolveActionForPlayer(action: PlayerAction, pgd: PlayerGameData) {
+        switch (action) {
+            case PlayerAction.HIT:
+                this.resolveHit(pgd);
+                break;
+            case PlayerAction.STAND:
+                this.resolveStand(pgd);
+                break;
+            default:
+                throw Error(`Unable to resolve PlayerAction ${action}`);
+        }
+    }
+
+    private resolveHit(pgd: PlayerGameData) {
+        const card: Card = this.deck.getTopCard();
+        pgd.addToDownCards(card);
+    }
+
+    private resolveStand(pgd: PlayerGameData) {
+        pgd.endTurn();
     }
 
     private validateTokenBelongsToThisGamestate(token: string) {
