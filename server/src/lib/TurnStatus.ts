@@ -1,6 +1,6 @@
 enum TurnStatus {
     WAITING = "WAITING",
-    DONE = "DONE",
+    OVER = "OVER",
 }
 
 export default TurnStatus;
